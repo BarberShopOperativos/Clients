@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1444971012 source:/home/lcruz/Documents/BarberShop/Clients/main.c
+	<stdio.h>
+	<stdlib.h>
+	"BarberShopStructures.h"
+
+1444972214 /home/lcruz/Documents/BarberShop/Clients/BarberShopStructures.h
+	<stdlib.h>
+	<malloc.h>
+	<stdbool.h>
+	<pthread.h>
+	<time.h>
+
+1444971006 source:/home/lcruz/Documents/BarberShop/Clients/BarberShopStructures.c
+	"BarberShopStructures.h"
+
