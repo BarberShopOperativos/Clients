@@ -1,16 +1,20 @@
 # depslib dependency file v1.0
-1444971012 source:/home/lcruz/Documents/BarberShop/Clients/main.c
+1445222625 source:/home/lcruz/Documents/BarberShop/Clients/main.c
 	<stdio.h>
 	<stdlib.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/ipc.h>
+	<sys/shm.h>
 	"BarberShopStructures.h"
 
-1444972214 /home/lcruz/Documents/BarberShop/Clients/BarberShopStructures.h
+1445053319 /home/lcruz/Documents/BarberShop/Clients/BarberShopStructures.h
 	<stdlib.h>
 	<malloc.h>
 	<stdbool.h>
 	<pthread.h>
-	<time.h>
+	<unistd.h>
 
-1444971006 source:/home/lcruz/Documents/BarberShop/Clients/BarberShopStructures.c
+1445056759 source:/home/lcruz/Documents/BarberShop/Clients/BarberShopStructures.c
 	"BarberShopStructures.h"
 

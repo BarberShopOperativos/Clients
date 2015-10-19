@@ -1,31 +1,14 @@
 #include "BarberShopStructures.h"
 
-// Necessary sleep variables
-#define NANO_SECOND_MULTIPLIER  1000000  // 1 millisecond = 1,000,000 Nanoseconds
-const long INTERVAL_MS = 500 * NANO_SECOND_MULTIPLIER;
-struct timespec sleepValue = {0};
 pthread_mutex_t mut;
 void *threadRun(void * threadArg);
-
-
-/// <summary>
-/// Method to wait all threads to finish!
-/// </summary>
-void joinThreadList(ClientThreadList* pList)
-{
-	ClientThread *client = pList->first;
-	while(client){
-        pthread_join(client->thread,0);
-		client = client->nextClient;
-	}
-}
-
 
 /// <summary>
 /// Method to allocate memory for a single client
 /// </summary>
 ClientThread *createClient (int pId, bool pHasPriority,
-    Node *pActualNode, ClientThreadList *pList)
+    Node *pActualNode, ClientThreadList *pList, Container *pChairsQueue,
+    Container *pBarbersList,Container *pCashiersQueue)
 {
     // Create client
     ClientThread *client = malloc(sizeof(ClientThread));
@@ -33,15 +16,20 @@ ClientThread *createClient (int pId, bool pHasPriority,
     // Set client props
     client->id = pId;
     client->isActive = true;
+    client->hasPriority = pHasPriority;
+    client->isInChairsQueue = false;
     client->isInBarbersList = false;
     client->isInCashierQueue = false;
-    client->isInChairsQueue = false;
-    client->hasPriority = pHasPriority;
     client->actualNode = pActualNode;
     client->nextClient = NULL;
+    client->chairsQueue = pChairsQueue;
+    client->barbersList = pBarbersList;
+    client->cashiersQueue = pCashiersQueue;
 
     // Add thread to list
     addNodeToClientThreadList(pList,client);
+
+    printf("Thread: %d:  creado \n", client->id);
 
     // Initialize client thread
     if(pthread_create(&client->thread, 0, threadRun, client))
@@ -187,13 +175,51 @@ void printQueueContainer(Container *pContainer)
 void *threadRun(void  *threadArg)
 {
     ClientThread *client = (ClientThread*)threadArg;
-    sleepValue.tv_nsec = INTERVAL_MS;
 
     while (client->isActive)
     {
-        printf("Soy el thread: %d:  corriendo \n", client->id);
-        nanosleep(&sleepValue, NULL);
+        int randValue = generateRandomInRange(1,4);
+        //printf("Soy el thread: %d:  corriendo, rand %d \n", client->id, randValue);
+        sleep(randValue);
     }
     pthread_exit(NULL);
     return NULL;
 }
+
+/// <summary>
+/// Locks the thread
+/// </summary>
+void lock()
+{
+    pthread_mutex_lock(&mut);
+}
+
+/// <summary>
+/// Unlocks the thread
+/// </summary>
+void unlock()
+{
+    pthread_mutex_unlock(&mut);
+}
+
+/// <summary>
+/// Method to wait all threads to finish!
+/// </summary>
+void joinThreadList(ClientThreadList* pList)
+{
+	ClientThread *client = pList->first;
+	while(client){
+        pthread_join(client->thread,0);
+		client = client->nextClient;
+	}
+}
+
+/// <summary>
+/// Method to generate random number in a range of values
+/// </summary>
+int generateRandomInRange(int pMin, int pMax)
+{
+    srand(time(NULL));
+    return (rand() % (pMax+1-pMin))+pMin;
+}
+

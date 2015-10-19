@@ -5,7 +5,7 @@
 #include <malloc.h>
 #include <stdbool.h>
 #include <pthread.h>
-#include <time.h>
+#include <unistd.h>
 
 // Struct declaration
 typedef struct ClientThread ClientThread;
@@ -28,7 +28,9 @@ struct ClientThread
     pthread_t thread;
     Node *actualNode;
     ClientThread *nextClient;
-    Container
+    Container *chairsQueue;
+    Container *barbersList;
+    Container *cashiersQueue;
 };
 
 /// <summary>
