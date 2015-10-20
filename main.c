@@ -6,12 +6,11 @@
 #include <sys/shm.h>
 #include "BarberShopStructures.h"
 
-#define SHMSZ     50
+#define SHMSZ 200
 
 int main()
 {
     programInit();
-    return 0;
 }
 
 
@@ -60,10 +59,15 @@ void programInit()
         exit(1);
     }
 
+    if(chairsQueue->maxLenght == NULL)
+    {
+        printf("Null value");
+    }
+
     printf("Cantidad sillas: %d ... \n", chairsQueue->maxLenght);
     printf("Cantidad barberos: %d ... \n", barbersList->maxLenght);
 
-    /*
+
     ClientThreadList *list = createClientTreadList();
 
     printf("Creando Clientes... \n");
@@ -73,8 +77,8 @@ void programInit()
         createClient(list->length,false,NULL,list,NULL,NULL,NULL);
         sleep(generateRandomInRange(2,4));
     }
-    */
-    //joinThreadList(list);
+
+    joinThreadList(list);
 
 
 }

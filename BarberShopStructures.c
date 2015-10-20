@@ -1,8 +1,5 @@
 #include "BarberShopStructures.h"
 
-pthread_mutex_t mut;
-void *threadRun(void * threadArg);
-
 /// <summary>
 /// Method to allocate memory for a single client
 /// </summary>
@@ -186,21 +183,6 @@ void *threadRun(void  *threadArg)
     return NULL;
 }
 
-/// <summary>
-/// Locks the thread
-/// </summary>
-void lock()
-{
-    pthread_mutex_lock(&mut);
-}
-
-/// <summary>
-/// Unlocks the thread
-/// </summary>
-void unlock()
-{
-    pthread_mutex_unlock(&mut);
-}
 
 /// <summary>
 /// Method to wait all threads to finish!

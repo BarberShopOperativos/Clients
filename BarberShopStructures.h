@@ -64,3 +64,21 @@ typedef struct Node
     struct Node *next, *before;
     ClientThread *actualClient;
 };
+
+void *threadRun(void * threadArg);
+ClientThread *createClient (int pId, bool pHasPriority,
+    Node *pActualNode, ClientThreadList *pList, Container *pChairsQueue,
+    Container *pBarbersList,Container *pCashiersQueue);
+ClientThreadList *createClientTreadList();
+void addNodeToClientThreadList(ClientThreadList *pList, ClientThread *pClient);
+Node *createNode (int pId);
+Container *createContainer();
+void addNodeToListContainer(Container *pContainer, int pId);
+void printListContainer(Container *pContainer);
+void addNodeToQueueContainer(Container *pContainer, int pId);
+void removeQueueContainerHead(Container *pContainer);
+void printQueueContainer(Container *pContainer);
+void *threadRun(void  *threadArg);
+void joinThreadList(ClientThreadList* pList);
+int generateRandomInRange(int pMin, int pMax);
+
