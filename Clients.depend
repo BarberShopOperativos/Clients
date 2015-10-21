@@ -18,3 +18,22 @@
 1445310023 source:/home/lcruz/Documents/BarberShop/Clients/BarberShopStructures.c
 	"BarberShopStructures.h"
 
+1445400689 source:/home/luiscruz/Desktop/BarberShop/Clients/BarberShopStructures.c
+	"BarberShopStructures.h"
+
+1445400689 /home/luiscruz/Desktop/BarberShop/Clients/BarberShopStructures.h
+	<stdlib.h>
+	<malloc.h>
+	<stdbool.h>
+	<pthread.h>
+	<unistd.h>
+
+1445449574 source:/home/luiscruz/Desktop/BarberShop/Clients/main.c
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/ipc.h>
+	<sys/shm.h>
+	"BarberShopStructures.h"
+
