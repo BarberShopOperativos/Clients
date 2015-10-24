@@ -73,12 +73,13 @@ ClientThreadList *createClientTreadList();
 void addNodeToClientThreadList(ClientThreadList *pList, ClientThread *pClient);
 Node *createNode (int pId);
 Container *createContainer();
-void addNodeToListContainer(Container *pContainer, int pId);
+Node *addNodeToListContainer(Container *pContainer, int pId);
 void printListContainer(Container *pContainer);
-void addNodeToQueueContainer(Container *pContainer, int pId);
+Node *addNodeToQueueContainer(Container *pContainer, int pId);
 void removeQueueContainerHead(Container *pContainer);
 void printQueueContainer(Container *pContainer);
 void *threadRun(void  *threadArg);
 void joinThreadList(ClientThreadList* pList);
 int generateRandomInRange(int pMin, int pMax);
-
+void addExistingNodeToListContainer(Container *pContainer, Node *pNode);
+void addExistingNodeToQueueContainer(Container *pContainer, Node *pNode);

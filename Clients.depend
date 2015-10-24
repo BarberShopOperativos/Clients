@@ -37,3 +37,35 @@
 	<sys/shm.h>
 	"BarberShopStructures.h"
 
+1445729723 source:/home/luiscruz/Documents/BarberShop/Clients/BarberShopStructures.c
+	"BarberShopStructures.h"
+
+1445727949 /home/luiscruz/Documents/BarberShop/Clients/BarberShopStructures.h
+	<stdlib.h>
+	<malloc.h>
+	<stdbool.h>
+	<pthread.h>
+	<unistd.h>
+
+1445711257 source:/home/luiscruz/Documents/BarberShop/Clients/SemaphoreStruct.c
+	"SemaphoreStruct.h"
+
+1445707081 /home/luiscruz/Documents/BarberShop/Clients/SemaphoreStruct.h
+	<sys/types.h>
+	<sys/ipc.h>
+	<sys/shm.h>
+	<stdio.h>
+	<semaphore.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<fcntl.h>
+
+1445729820 source:/home/luiscruz/Documents/BarberShop/Clients/main.c
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/ipc.h>
+	<sys/shm.h>
+	"BarberShopStructures.h"
+

@@ -25,7 +25,6 @@ ClientThread *createClient (int pId, bool pHasPriority,
 
     // Add thread to list
     addNodeToClientThreadList(pList,client);
-
     printf("Thread: %d:  creado \n", client->id);
 
     // Initialize client thread
@@ -90,9 +89,28 @@ Container *createContainer()
 /// <summary>
 /// Struct method to add a node to a list container
 /// </summary>
-void addNodeToListContainer(Container *pContainer, int pId)
+Node *addNodeToListContainer(Container *pContainer, int pId)
 {
     Node *node = createNode(pId);
+    if (pContainer->firstNode == NULL)
+    {
+        pContainer->firstNode = pContainer->lastNode = node;
+    }
+    else
+    {
+        pContainer->lastNode->next = node;
+        pContainer->lastNode = node;
+    }
+    pContainer->length += 1;
+    return node;
+}
+
+/// <summary>
+/// Struct method to add an existing node to a list container
+/// </summary>
+void addExistingNodeToListContainer(Container *pContainer, Node *pNode)
+{
+    Node *node = pNode;
     if (pContainer->firstNode == NULL)
     {
         pContainer->firstNode = pContainer->lastNode = node;
@@ -124,7 +142,7 @@ void printListContainer(Container *pContainer)
 /// <summary>
 /// Struct method to add a node to a queue container
 /// </summary>
-void addNodeToQueueContainer(Container *pContainer, int pId)
+Node* addNodeToQueueContainer(Container *pContainer, int pId)
 {
     Node *node = createNode(pId);
 
@@ -138,6 +156,29 @@ void addNodeToQueueContainer(Container *pContainer, int pId)
         node->next = pContainer->firstNode;
         pContainer->firstNode = node;
     }
+    pContainer->length += 1;
+
+    return node;
+}
+
+/// <summary>
+/// Struct method to add an existing node to a queue container
+/// </summary>
+void addExistingNodeToQueueContainer(Container *pContainer, Node *pNode)
+{
+    Node *node = pNode;
+
+    if (pContainer->firstNode == NULL)
+    {
+        pContainer->firstNode = pContainer->lastNode = node;
+    }
+    else
+    {
+        pContainer->firstNode->before = node;
+        node->next = pContainer->firstNode;
+        pContainer->firstNode = node;
+    }
+
     pContainer->length += 1;
 }
 
