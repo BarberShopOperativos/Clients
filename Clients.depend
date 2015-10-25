@@ -60,7 +60,7 @@
 	<sys/stat.h>
 	<fcntl.h>
 
-1445806018 source:/home/luiscruz/Documents/BarberShop/Clients/main.c
+1445808789 source:/home/luiscruz/Documents/BarberShop/Clients/main.c
 	<stdio.h>
 	<stdlib.h>
 	<unistd.h>
@@ -69,10 +69,10 @@
 	<sys/shm.h>
 	"ClientThread.h"
 
-1445805940 source:/home/luiscruz/Documents/BarberShop/Clients/ClientThread.c
+1445808787 source:/home/luiscruz/Documents/BarberShop/Clients/ClientThread.c
 	"ClientThread.h"
 
-1445805979 /home/luiscruz/Documents/BarberShop/Clients/ClientThread.h
+1445807603 /home/luiscruz/Documents/BarberShop/Clients/ClientThread.h
 	<time.h>
 	"BarberShopStructures.h"
 	"SemaphoreStruct.h"

@@ -1,9 +1,7 @@
 #ifndef CLIENTTHREAD_H_INCLUDED
 #define CLIENTTHREAD_H_INCLUDED
-
-
-
 #endif // CLIENTTHREAD_H_INCLUDED
+
 #include <time.h>
 #include "BarberShopStructures.h"
 #include "SemaphoreStruct.h"
@@ -32,7 +30,6 @@ struct ClientThread
     Semaphore *cashierSem;
     Semaphore *fileSem;
     Semaphore *sClientsCounterSem;
-
 };
 
 /// <summary>
@@ -71,13 +68,6 @@ void moveSpecialClient(ClientThread *pClient);
 bool moveToBarber(ClientThread *pClient);
 Node *findEmptyChair(ClientThread *pClient);
 Node *findEmptyBarber(ClientThread *pClient);
-
-
-
-
-
-
+void executeBarberLogic(ClientThread *pClient);
+void executeCashierLogic(ClientThread *pClient);
 void writeLog(int pBufferSize, ClientThread *pClient, char *pFormat);
-
-
-

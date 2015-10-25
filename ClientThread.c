@@ -7,6 +7,8 @@ char SP_CLIENT_QUEUE_OUT[] = "Cliente %s %d no permite la ejecucion de cliente n
 char CHAIR_FOUND[] = "Cliente %s %d logra encontrar silla disponible. Hora: %s \n";
 char CHAIR_MOVE[] = "Cliente %s %d se mueve a otra silla en la cola. Hora: %s \n";
 char MOVED_TO_BARBER[] = "Cliente %s %d va ser atendido por un barbero. Hora: %s \n";
+char EXEC_BARBER[] = "Cliente %s %d ya fue atentido por el barbero. Hora: %s \n";
+char EXEC_CASHIER[] = "Cliente %s %d ya fue atentido por el cajero. Ahora se retira. Hora: %s \n";
 
 
 /// <summary>
@@ -107,28 +109,20 @@ void *threadRun(void  *threadArg)
 
     while (client->isActive)
     {
-       switch(client->state)
-       {
-       case 1 :
-          verifyChairPosition(client);
-          break;
-       case 2 :
-          printf("Well done\n" );
-          break;
-        case 3 :
-          printf("Well done\n" );
-          break;
-        case 4 :
-          printf("Well done\n" );
-          break;
-       default :
-          printf("Error en el thread: %d \n", client->id);
-   }
-
-
-        //int randValue = generateRandomInRange(1,4);
-        //printf("Soy el thread: %d:  corriendo, rand %d \n", client->id, randValue);
-        //sleep(randValue);
+        switch(client->state)
+        {
+            case 1 :
+                verifyChairPosition(client);
+                break;
+            case 2 :
+                executeBarberLogic(client);
+                break;
+            case 3 :
+              executeCashierLogic(client);
+              break;
+            default :
+              printf("Error en el thread: %d \n", client->id);
+        }
     }
     pthread_exit(NULL);
     return NULL;
@@ -142,6 +136,8 @@ void verifyChairPosition(ClientThread *pClient)
     // Find the client chair
     if(pClient->actualNode == NULL) assignNewChair(pClient);
     else moveFromChair(pClient);
+    // Just to free CPU
+    sleep(1);
 }
 
 /// <summary>
@@ -244,10 +240,7 @@ void moveSpecialClient(ClientThread *pClient)
 
         pClient->isActive = false;
         writeLog(100,pClient,SP_CLIENT_QUEUE_OUT);
-
     }
-
-
 }
 
 /// <summary>
@@ -330,6 +323,34 @@ Node *findEmptyBarber(ClientThread *pClient)
 }
 
 /// <summary>
+/// Sleeps and leaves the barbers list
+/// </summary>
+void executeBarberLogic(ClientThread *pClient)
+{
+    pClient->state = 3;
+    sem_wait(pClient->barbersSem->mutex);
+    pClient->actualNode->isOcupied = false;
+    // Sleep to simulate the barber execution
+    sleep(generateRandomInRange(4,8));
+    sem_post(pClient->barbersSem->mutex);
+    writeLog(100,pClient,EXEC_BARBER);
+}
+
+
+/// <summary>
+/// Sleeps and leaves the barbers list
+/// </summary>
+void executeCashierLogic(ClientThread *pClient)
+{
+    sem_wait(pClient->cashierSem->mutex);
+    sleep(generateRandomInRange(2,6));
+    sem_post(pClient->cashierSem->mutex);
+    writeLog(150,pClient,EXEC_CASHIER);
+    pClient->isActive = false;
+}
+
+
+/// <summary>
 /// Formats a string to be written in the file
 /// </summary>
 void writeLog(int pBufferSize, ClientThread *pClient, char *pFormat)
@@ -347,8 +368,9 @@ void writeLog(int pBufferSize, ClientThread *pClient, char *pFormat)
     else clientType = REGULAR;
 
     sprintf(str, pFormat,clientType,pClient->id,asctime (timeinfo));
-
     str[pBufferSize - 1] = NULL;
+
+    printf(str);
     writeFileAppend(str,pClient->fileSem->mutex);
 
     return str;

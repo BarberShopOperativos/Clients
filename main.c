@@ -14,6 +14,7 @@ char BARBERS_SEM[] = "BarbersSem";
 char CASHIER_SEM[] = "CashierSem";
 char FILE_SEM[] = "FileSem";
 char S_CLIENTS_COUNTER_SEM[] = "SpecialClientsCounter";
+char CLIENTS_FINISH[] = "Se detuvo el programa generador de clientes /n";
 
 
 void programInit();
@@ -63,8 +64,8 @@ void programInit()
     barbersQuantityPtr = pointIntSegment(barbersQuantityShmID);
 
     // Locate Structures Segments
-    chairsShmID = locateSegment(chairsKey,STRUCT_SEG_SIZE * *chairsQuantityPtr);
-    barbersShmID = locateSegment(barbersKey,STRUCT_SEG_SIZE * *barbersQuantityPtr);
+    chairsShmID = locateSegment(chairsKey,STRUCT_SEG_SIZE );
+    barbersShmID = locateSegment(barbersKey,STRUCT_SEG_SIZE);
     cashiershmID = locateSegment(cashierKey,STRUCT_SEG_SIZE);
     specialClientsCounterShmID = locateSegment(specialClientsCounterKey,INT_SEG_SIZE);
     stopClientsShmID = locateSegment(stopClientsKey,INT_SEG_SIZE);
@@ -101,8 +102,10 @@ void programInit()
         chairsSem,barbersSem,cashierSem,fileSem,sClientsCounterSem);
         sleep(generateRandomInRange(2,4));
     }
-
     joinThreadList(list);
+
+    writeFileAppend(CLIENTS_FINISH,fileSem->mutex);
+
 }
 
 
