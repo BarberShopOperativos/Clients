@@ -1,69 +1,6 @@
 #include "BarberShopStructures.h"
 
 /// <summary>
-/// Method to allocate memory for a single client
-/// </summary>
-ClientThread *createClient (int pId, bool pHasPriority,
-    Node *pActualNode, ClientThreadList *pList, Container *pChairsQueue,
-    Container *pBarbersList,Container *pCashiersQueue)
-{
-    // Create client
-    ClientThread *client = malloc(sizeof(ClientThread));
-
-    // Set client props
-    client->id = pId;
-    client->isActive = true;
-    client->hasPriority = pHasPriority;
-    client->isInChairsQueue = false;
-    client->isInBarbersList = false;
-    client->isInCashierQueue = false;
-    client->actualNode = pActualNode;
-    client->nextClient = NULL;
-    client->chairsQueue = pChairsQueue;
-    client->barbersList = pBarbersList;
-    client->cashiersQueue = pCashiersQueue;
-
-    // Add thread to list
-    addNodeToClientThreadList(pList,client);
-    printf("Thread: %d:  creado \n", client->id);
-
-    // Initialize client thread
-    if(pthread_create(&client->thread, 0, threadRun, client))
-    {
-		fprintf(stderr, "Error creating thread\n");
-	}
-
-    return client;
-}
-
-/// <summary>
-/// Method to allocate memory for the ClientThreadList structure
-/// </summary>
-ClientThreadList *createClientTreadList()
-{
-    ClientThreadList *list = malloc(sizeof(ClientThreadList));
-    list->first = list->last = NULL;
-    return list;
-}
-
-/// <summary>
-/// Struct method to add an existing client to a list
-/// </summary>
-void addNodeToClientThreadList(ClientThreadList *pList, ClientThread *pClient)
-{
-    if (pList->first == NULL)
-    {
-        pList->first = pList->last = pClient;
-    }
-    else
-    {
-        pList->last->nextClient = pClient;
-        pList->last = pClient;
-    }
-    pList->length += 1;
-}
-
-/// <summary>
 /// Method to allocate memory for a simple node
 /// </summary>
 Node *createNode (int pId)
@@ -71,7 +8,6 @@ Node *createNode (int pId)
     Node *newNode = malloc(sizeof(Node));
     newNode->id = pId;
     newNode->isOcupied = false;
-    newNode->actualClient = false;
     newNode->next = newNode->before = NULL;
     return newNode;
 }
@@ -208,33 +144,6 @@ void printQueueContainer(Container *pContainer)
     }
 
     printf("List End");
-}
-
-void *threadRun(void  *threadArg)
-{
-    ClientThread *client = (ClientThread*)threadArg;
-
-    while (client->isActive)
-    {
-        int randValue = generateRandomInRange(1,4);
-        //printf("Soy el thread: %d:  corriendo, rand %d \n", client->id, randValue);
-        sleep(randValue);
-    }
-    pthread_exit(NULL);
-    return NULL;
-}
-
-
-/// <summary>
-/// Method to wait all threads to finish!
-/// </summary>
-void joinThreadList(ClientThreadList* pList)
-{
-	ClientThread *client = pList->first;
-	while(client){
-        pthread_join(client->thread,0);
-		client = client->nextClient;
-	}
 }
 
 /// <summary>

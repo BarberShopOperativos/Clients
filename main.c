@@ -4,10 +4,17 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include "BarberShopStructures.h"
+#include "ClientThread.h"
 
 #define INT_SEG_SIZE 5
 #define STRUCT_SEG_SIZE 10
+
+char CHAIRS_SEM[] = "ChairsSem";
+char BARBERS_SEM[] = "BarbersSem";
+char CASHIER_SEM[] = "CashierSem";
+char FILE_SEM[] = "FileSem";
+char S_CLIENTS_COUNTER_SEM[] = "SpecialClientsCounter";
+
 
 void programInit();
 int locateSegment(key_t pKey, int pSegmentSize);
@@ -19,6 +26,7 @@ key_t locateSharedStrutures(Container *pContainer, key_t pBaseNodeKey, bool pIsQ
 int main()
 {
     programInit();
+    return 0;
 }
 
 
@@ -31,6 +39,12 @@ void programInit()
     key_t chairsKey, barbersKey, cashierKey, specialClientsCounterKey,stopClientsKey,
         stopSpecialClientsKey,chairsQuantityKey,barbersQuantityKey,baseNodeKey;
     Container *chairsQueue, *barbersList,*cashierQueue;
+
+    Semaphore *chairsSem = getSemaphore(CHAIRS_SEM);
+    Semaphore *barbersSem = getSemaphore(BARBERS_SEM);
+    Semaphore *cashierSem = getSemaphore(CASHIER_SEM);
+    Semaphore *fileSem = getSemaphore(FILE_SEM);
+    Semaphore *sClientsCounterSem = getSemaphore(S_CLIENTS_COUNTER_SEM);
 
     // Segment Keys
     chairsKey = 5677;
@@ -83,13 +97,12 @@ void programInit()
 
     while(*stopClientesPtr == 1)
     {
-        createClient(list->length,false,NULL,list,NULL,NULL,NULL);
+        createClient(list->length,specialClientsCounterPtr,false,list,chairsQueue,barbersList,cashierQueue,
+        chairsSem,barbersSem,cashierSem,fileSem,sClientsCounterSem);
         sleep(generateRandomInRange(2,4));
     }
 
     joinThreadList(list);
-
-
 }
 
 
@@ -101,7 +114,7 @@ int locateSegment(key_t pKey, int pSegmentSize)
     int shmID;
 
     if ((shmID = shmget(pKey, pSegmentSize, 0666)) < 0) {
-        printf("Error locating segment with key: %d /n",pKey);
+        printf("Error localizando segmento con llave: %d /n",pKey);
         exit(1);
     }
 
@@ -118,7 +131,7 @@ int *pointIntSegment(int pShmID)
     int *pointer;
 
     if ((pointer = shmat(pShmID, NULL, 0)) == (int *) -1) {
-        printf("Error pointing to segment with key: %d /n", pShmID);
+        printf("Error obteniendo puntero de segmento con llave: %d /n", pShmID);
         exit(1);
     }
 
@@ -134,7 +147,7 @@ Container *pointContainerSegment(int pShmID)
 
     Container *pointer;
     if ((pointer = shmat(pShmID, NULL, 0)) == (Container *) -1) {
-        printf("Error pointing to segment with key: %d /n", pShmID);
+        printf("Error obteniendo puntero de segmento con llave: %d /n", pShmID);
         exit(1);
     }
 
@@ -150,7 +163,7 @@ Node *pointNodeSegment(int pShmID)
 
     Node *pointer;
     if ((pointer = shmat(pShmID, NULL, 0)) == (Node *) -1) {
-        printf("Error pointing to segment with key: %d /n", pShmID);
+        printf("Error obteniendo puntero de segmento con llave: %d /n", pShmID);
         exit(1);
     }
 
@@ -175,12 +188,13 @@ key_t locateSharedStrutures(Container *pContainer, key_t pBaseNodeKey, bool pIsQ
         nodeShmID = locateSegment(baseNodeKey,STRUCT_SEG_SIZE);
         actualNode = pointNodeSegment(nodeShmID);
 
+        actualNode->next = actualNode->before = NULL;
+
         if(pIsQueue) addExistingNodeToQueueContainer(pContainer,actualNode);
         else addExistingNodeToListContainer(pContainer,actualNode);
 
-        printf("Node BaseKey: %d \n", actualNode->id);
+        //printf("Node BaseKey: %d \n", actualNode->id);
     }
-
     return baseNodeKey;
 
 }

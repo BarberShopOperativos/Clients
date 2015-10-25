@@ -23,3 +23,4 @@ struct Semaphore
 };
 
 Semaphore *createSemaphore (char *pName);
+Semaphore *getSemaphore(char *pName);

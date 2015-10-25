@@ -21,3 +21,25 @@ Semaphore *createSemaphore (char *pName)
 
     return semaphore;
 }
+
+/// <summary>
+/// Method to restore a previously created semaphore
+/// </summary>
+Semaphore *getSemaphore(char *pName)
+{
+    Semaphore *semaphore = malloc(sizeof(Semaphore));
+    semaphore->name = pName;
+
+    //create & initialize existing semaphore
+    semaphore->mutex = sem_open(pName,0,0644,0);
+    if(semaphore->mutex == SEM_FAILED)
+    {
+        printf("Error recuperando semaforo: %s \n", pName);
+        sem_close(pName);
+        exit(-1);
+    }
+
+    printf("Semaforo %s recuperado... \n", pName);
+
+    return semaphore;
+}
