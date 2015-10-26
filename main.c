@@ -8,6 +8,7 @@
 
 #define INT_SEG_SIZE 5
 #define STRUCT_SEG_SIZE 10
+#define CASHIER_QUEUE_SIZE 100
 
 char CHAIRS_SEM[] = "ChairsSem";
 char BARBERS_SEM[] = "BarbersSem";
@@ -34,12 +35,13 @@ int main()
 void programInit()
 {
     // Declare needed variables
-    int chairsShmID, barbersShmID, cashiershmID, specialClientsCounterShmID,stopClientsShmID,
-        stopSpecialClientesShmID,chairsQuantityShmID, barbersQuantityShmID,
-        *specialClientsCounterPtr, *stopClientesPtr, *stopSpecialClientsPtr, *chairsQuantityPtr, *barbersQuantityPtr;
+    int chairsShmID, barbersShmID, cashiershmID, specialClientsCounterShmID,stopClientsShmID,stopSpecialClientesShmID,
+        chairsQuantityShmID, barbersQuantityShmID,
+        *specialClientsCounterPtr, *stopClientesPtr, *stopSpecialClientsPtr, *chairsQuantityPtr, *barbersQuantityPtr,
+        *cashierQueue;
     key_t chairsKey, barbersKey, cashierKey, specialClientsCounterKey,stopClientsKey,
         stopSpecialClientsKey,chairsQuantityKey,barbersQuantityKey,baseNodeKey;
-    Container *chairsQueue, *barbersList,*cashierQueue;
+    Container *chairsQueue, *barbersList;
 
     Semaphore *chairsSem = getSemaphore(CHAIRS_SEM);
     Semaphore *barbersSem = getSemaphore(BARBERS_SEM);
@@ -66,7 +68,7 @@ void programInit()
     // Locate Structures Segments
     chairsShmID = locateSegment(chairsKey,STRUCT_SEG_SIZE );
     barbersShmID = locateSegment(barbersKey,STRUCT_SEG_SIZE);
-    cashiershmID = locateSegment(cashierKey,STRUCT_SEG_SIZE);
+    cashiershmID = locateSegment(cashierKey,CASHIER_QUEUE_SIZE);
     specialClientsCounterShmID = locateSegment(specialClientsCounterKey,INT_SEG_SIZE);
     stopClientsShmID = locateSegment(stopClientsKey,INT_SEG_SIZE);
     stopSpecialClientesShmID = locateSegment(stopSpecialClientsKey,INT_SEG_SIZE);
@@ -74,15 +76,15 @@ void programInit()
     // Get the structures pointers
     chairsQueue = pointContainerSegment(chairsShmID);
     barbersList = pointContainerSegment(barbersShmID);
-    cashierQueue = pointContainerSegment(cashiershmID);
+    cashierQueue = pointIntSegment(cashiershmID);
     specialClientsCounterPtr = pointIntSegment(specialClientsCounterShmID);
     stopClientesPtr = pointIntSegment(stopClientsShmID);
     stopSpecialClientsPtr = pointIntSegment(stopSpecialClientesShmID);
 
+    // Reset initial values
     chairsQueue->firstNode = chairsQueue->lastNode = NULL;
     chairsQueue->length = barbersList->length = 0;
     barbersList->firstNode = barbersList->lastNode = NULL;
-    cashierQueue->firstNode = cashierQueue->lastNode = NULL;
 
     baseNodeKey = barbersQuantityKey;
     baseNodeKey = locateSharedStrutures(chairsQueue,baseNodeKey,true);
@@ -98,12 +100,12 @@ void programInit()
 
     while(*stopClientesPtr == 1)
     {
-        createClient(list->length,specialClientsCounterPtr,false,list,chairsQueue,barbersList,cashierQueue,
+        createClient(list->length,specialClientsCounterPtr,CASHIER_QUEUE_SIZE,false,list,chairsQueue,barbersList,cashierQueue,
         chairsSem,barbersSem,cashierSem,fileSem,sClientsCounterSem);
-        sleep(generateRandomInRange(2,4));
+        sleep(generateRandomInRange(2,3));
     }
-    joinThreadList(list);
 
+    joinThreadList(list);
     writeFileAppend(CLIENTS_FINISH,fileSem->mutex);
 
 }

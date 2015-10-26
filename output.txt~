@@ -1,2 +1,118 @@
-Test
-
+Cliente Regular 0 logra encontrar silla disponible. Hora: Sun Oct 25 17:04:53 2015
+ 
+Cliente Regular 0 va ser atendido por un barbero. Hora: Sun Oct 25 17:04:54 2015
+ 
+Cliente Regular 1 logra encontrar silla disponible. Hora: Sun Oct 25 17:04:57 2015
+ 
+Cliente Regular 2 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:01 2015
+ 
+Cliente Regular 0 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:05:02 2015
+ 
+Cliente Regular 1 va ser atendido por un barbero. Hora: Sun Oct 25 17:05:02 2015
+ 
+Cliente Regular 2 se mueve a otra silla en la cola. Hora: Sun Oct 25 17:05:02 2015
+ 
+Cliente Regular 3 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:05 2015
+ 
+Cliente Regular 0 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:05:07 2015
+ 
+Cliente Regular 4 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:08 2015
+ 
+Cliente Regular 1 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:05:11 2015
+ 
+Cliente Regular 2 va ser atendido por un barbero. Hora: Sun Oct 25 17:05:11 2015
+ 
+Cliente Regular 5 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:11 2015
+ 
+Cliente Regular 6 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:15 2015
+ 
+Cliente Regular 1 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:05:17 2015
+ 
+Cliente Regular 2 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:05:19 2015
+ 
+Cliente Regular 5 va ser atendido por un barbero. Hora: Sun Oct 25 17:05:19 2015
+ 
+Cliente Regular 7 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:19 2015
+ 
+Cliente Regular 2 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:05:21 2015
+ 
+Cliente Regular 8 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:22 2015
+ 
+Cliente Regular 9 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:25 2015
+ 
+Cliente Regular 5 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:05:28 2015
+ 
+Cliente Regular 7 va ser atendido por un barbero. Hora: Sun Oct 25 17:05:28 2015
+ 
+Cliente Regular 10 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:28 2015
+ 
+Cliente Regular 11 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:05:30 2015
+ 
+Cliente Regular 5 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:05:31 2015
+ 
+Cliente Regular 12 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:05:33 2015
+ 
+Cliente Regular 7 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:05:34 2015
+ 
+Cliente Regular 10 va ser atendido por un barbero. Hora: Sun Oct 25 17:05:34 2015
+ 
+Cliente Regular 3 se mueve a otra silla en la cola. Hora: Sun Oct 25 17:05:34 2015
+ 
+Cliente Regular 4 se mueve a otra silla en la cola. Hora: Sun Oct 25 17:05:34 2015
+ 
+Cliente Regular 13 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:35 2015
+ 
+Cliente Regular 7 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:05:39 2015
+ 
+Cliente Regular 14 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:05:39 2015
+ 
+Cliente Regular 10 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:05:42 2015
+ 
+Cliente Regular 3 va ser atendido por un barbero. Hora: Sun Oct 25 17:05:42 2015
+ 
+Cliente Regular 15 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:42 2015
+ 
+Cliente Regular 16 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:05:44 2015
+ 
+Cliente Regular 10 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:05:46 2015
+ 
+Cliente Regular 3 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:05:48 2015
+ 
+Cliente Regular 15 va ser atendido por un barbero. Hora: Sun Oct 25 17:05:48 2015
+ 
+Cliente Regular 17 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:48 2015
+ 
+Cliente Regular 18 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:05:50 2015
+ 
+Cliente Regular 19 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:05:52 2015
+ 
+Cliente Regular 3 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:05:53 2015
+ 
+Cliente Regular 15 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:05:56 2015
+ 
+Cliente Regular 17 va ser atendido por un barbero. Hora: Sun Oct 25 17:05:56 2015
+ 
+Cliente Regular 20 logra encontrar silla disponible. Hora: Sun Oct 25 17:05:56 2015
+ 
+Cliente Regular 21 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:05:59 2015
+ 
+Cliente Regular 15 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:06:00 2015
+ 
+Cliente Regular 22 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:06:03 2015
+ 
+Cliente Regular 17 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:06:05 2015
+ 
+Cliente Regular 20 va ser atendido por un barbero. Hora: Sun Oct 25 17:06:05 2015
+ 
+Cliente Regular 23 logra encontrar silla disponible. Hora: Sun Oct 25 17:06:05 2015
+ 
+Cliente Regular 24 no encuentra silla disponible y se retira. Hora: Sun Oct 25 17:06:07 2015
+ 
+Cliente Regular 17 ya fue atentido por el cajero. Ahora se retira. Hora: Sun Oct 25 17:06:09 2015
+ 
+Cliente Regular 20 ya fue atentido por el barbero 0. Hora: Sun Oct 25 17:06:10 2015
+ 
+Cliente Regular 23 va ser atendido por un barbero. Hora: Sun Oct 25 17:06:10 2015
+ 
+Cliente Regular 25 logra encontrar silla disponible. Hora: Sun Oct 25 17:06:10 2015
+ 

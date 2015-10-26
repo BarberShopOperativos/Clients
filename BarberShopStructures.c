@@ -155,3 +155,17 @@ int generateRandomInRange(int pMin, int pMax)
     return (rand() % (pMax+1-pMin))+pMin;
 }
 
+/// <summary>
+/// Clears the cashiers Queue
+/// </summary>
+void clearCashierQueue(int *pPointer, int pSize, int pClearValue)
+{
+    int *pointer = pPointer;
+
+    int i;
+    for ( i = 0; i < pSize; i++ )
+    {
+        *(pointer + i) = pClearValue;
+    }
+
+}

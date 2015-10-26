@@ -17,6 +17,9 @@ Semaphore *createSemaphore (char *pName)
         exit(-1);
     }
 
+    // Just to unlock all the semaphores in use
+    sem_post(semaphore->mutex);
+
     printf("Semaforo %s creado... \n", pName);
 
     return semaphore;

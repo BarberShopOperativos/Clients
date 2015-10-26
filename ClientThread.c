@@ -5,10 +5,13 @@ char REGULAR[] = "Regular";
 char NO_CHAIR_FOUND[] = "Cliente %s %d no encuentra silla disponible y se retira. Hora: %s \n";
 char SP_CLIENT_QUEUE_OUT[] = "Cliente %s %d no permite la ejecucion de cliente normal, este se retira. Hora: %s \n";
 char CHAIR_FOUND[] = "Cliente %s %d logra encontrar silla disponible. Hora: %s \n";
-char CHAIR_MOVE[] = "Cliente %s %d se mueve a otra silla en la cola. Hora: %s \n";
 char MOVED_TO_BARBER[] = "Cliente %s %d va ser atendido por un barbero. Hora: %s \n";
-char EXEC_BARBER[] = "Cliente %s %d ya fue atentido por el barbero. Hora: %s \n";
 char EXEC_CASHIER[] = "Cliente %s %d ya fue atentido por el cajero. Ahora se retira. Hora: %s \n";
+
+char CHAIR_MOVE[] = "Cliente %s %d se mueve a la silla %d en la cola. Hora: %s \n";
+char EXEC_BARBER[] = "Cliente %s %d ya fue atentido por el barbero %d. Hora: %s \n";
+char CASHIER_MOVE[] = "Cliente %s %d se mueve a la posicion %d del cajero. Hora: %s \n";
+
 
 
 /// <summary>
@@ -17,11 +20,12 @@ char EXEC_CASHIER[] = "Cliente %s %d ya fue atentido por el cajero. Ahora se ret
 ClientThread *createClient (
     int pId,
     int *pSpecialClientsCounterPtr,
+    int pCashierQueueSize,
     bool pHasPriority,
     ClientThreadList *pList,
     Container *pChairsQueue,
     Container *pBarbersList,
-    Container *pCashiersQueue,
+    int *pCashiersQueue,
     Semaphore *pChairsSem,
     Semaphore *pBarbersSem,
     Semaphore *pCashierSem,
@@ -34,6 +38,8 @@ ClientThread *createClient (
     // Set client props
     client->id = pId;
     client->specialClientsCounterPtr = pSpecialClientsCounterPtr;
+    client->cashierQueueSize = pCashierQueueSize;
+    client->cashierPosition = pCashierQueueSize - 1;
     client->isActive = true;
     client->state = 1;
     client->hasPriority = pHasPriority;
@@ -136,8 +142,6 @@ void verifyChairPosition(ClientThread *pClient)
     // Find the client chair
     if(pClient->actualNode == NULL) assignNewChair(pClient);
     else moveFromChair(pClient);
-    // Just to free CPU
-    sleep(1);
 }
 
 /// <summary>
@@ -183,11 +187,14 @@ void moveRegularClient(ClientThread *pClient)
     if(pClient->actualNode == pClient->chairsQueue->lastNode)
     {
         sem_wait(pClient->sClientsCounterSem->mutex);
+
         if(moveToBarber(pClient))
         {
             int *specialClientsCounter = pClient->specialClientsCounterPtr;
             *specialClientsCounter = 0;
         }
+
+
         sem_post(pClient->sClientsCounterSem->mutex);
     }
     else // Client tries to get another chair
@@ -200,7 +207,7 @@ void moveRegularClient(ClientThread *pClient)
             pClient->actualNode->isOcupied = false;
             pClient->actualNode = pClient->actualNode->next;
             pClient->actualNode->isOcupied = true;
-            writeLog(100,pClient,CHAIR_MOVE);
+            writeLongLog(150,pClient,CHAIR_MOVE, pClient->actualNode->id);
         }
 
         sem_post(pClient->chairsSem->mutex);
@@ -219,7 +226,6 @@ void moveSpecialClient(ClientThread *pClient)
     if(*pClient->specialClientsCounterPtr < 3)
     {
         triedToMove = true;
-
         if(moveToBarber(pClient))
         {
             int *specialClientsCounter = pClient->specialClientsCounterPtr;
@@ -265,7 +271,6 @@ bool moveToBarber(ClientThread *pClient)
 
     return isMoved;
 }
-
 
 /// <summary>
 /// Search the chairs queue for an empty chair
@@ -327,13 +332,47 @@ Node *findEmptyBarber(ClientThread *pClient)
 /// </summary>
 void executeBarberLogic(ClientThread *pClient)
 {
-    pClient->state = 3;
-    sem_wait(pClient->barbersSem->mutex);
-    pClient->actualNode->isOcupied = false;
-    // Sleep to simulate the barber execution
-    sleep(generateRandomInRange(4,8));
-    sem_post(pClient->barbersSem->mutex);
-    writeLog(100,pClient,EXEC_BARBER);
+    int cashierPosition = findCashierQueueSpace(pClient);
+
+    // If there is space
+    if(cashierPosition != -1)
+    {
+        sem_wait(pClient->barbersSem->mutex);
+        pClient->actualNode->isOcupied = false;
+        sleep(generateRandomInRange(5,30));
+        sem_post(pClient->barbersSem->mutex);
+
+        pClient->cashierPosition = cashierPosition;
+        pClient->state = 3;
+        writeLongLog(150,pClient,EXEC_BARBER, pClient->actualNode->id);
+    }
+
+
+}
+
+
+/// <summary>
+/// Looks for an space in the cashier queue
+/// </summary>
+int findCashierQueueSpace(ClientThread *pClient)
+{
+    int index, size = pClient->cashierQueueSize,*indexPointer = pClient->cashiersQueue, cashierSpaceIndex = -1;
+
+    sem_wait(pClient->cashierSem->mutex);
+
+    for(index = 0; index < size; index++)
+    {
+        if (*(indexPointer + index) == 0)
+        {
+            *(indexPointer + index) = 1;
+            cashierSpaceIndex = index;
+            break;
+        }
+    }
+
+    sem_post(pClient->cashierSem->mutex);
+
+    return cashierSpaceIndex;
 }
 
 
@@ -342,9 +381,55 @@ void executeBarberLogic(ClientThread *pClient)
 /// </summary>
 void executeCashierLogic(ClientThread *pClient)
 {
+    // Client is first in line
+    if(pClient->cashierPosition == 0)
+    {
+        payToCahier(pClient);
+    }
+    else
+    {
+        moveFromCashierQueue(pClient);
+    }
+}
+
+/// <summary>
+/// Tries to move in the cashiers queue
+/// </summary>
+void moveFromCashierQueue(ClientThread *pClient)
+{
+    int nextPosition = pClient->cashierPosition - 1;
+    bool moved = false;
+
     sem_wait(pClient->cashierSem->mutex);
-    sleep(generateRandomInRange(2,6));
+
+    // If next space if free
+    if(*(pClient->cashiersQueue + nextPosition) == 0)
+    {
+        *(pClient->cashiersQueue + pClient->cashierPosition) = 0;
+        *(pClient->cashiersQueue + nextPosition) = 1;
+        pClient->cashierPosition = nextPosition;
+
+    }
     sem_post(pClient->cashierSem->mutex);
+    if(moved)
+    {
+        writeLongLog(150,pClient,CASHIER_MOVE,pClient->cashierPosition);
+    }
+}
+
+
+
+/// <summary>
+/// Frees the space in queue an gets inactive
+/// </summary>
+void payToCahier(ClientThread *pClient)
+{
+    sem_wait(pClient->cashierSem->mutex);
+    // Free the space
+    *(pClient->cashiersQueue + pClient->cashierPosition) = 0;
+    sleep(generateRandomInRange(5,30));
+    sem_post(pClient->cashierSem->mutex);
+
     writeLog(150,pClient,EXEC_CASHIER);
     pClient->isActive = false;
 }
@@ -368,6 +453,32 @@ void writeLog(int pBufferSize, ClientThread *pClient, char *pFormat)
     else clientType = REGULAR;
 
     sprintf(str, pFormat,clientType,pClient->id,asctime (timeinfo));
+    str[pBufferSize - 1] = NULL;
+
+    printf(str);
+    writeFileAppend(str,pClient->fileSem->mutex);
+
+    return str;
+}
+
+/// <summary>
+/// Formats the barbers string  message to be written in the file
+/// </summary>
+void writeLongLog(int pBufferSize, ClientThread *pClient, char *pFormat, int pObject)
+{
+    char str[pBufferSize];
+    time_t rawtime;
+    struct tm * timeinfo;
+
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+
+    char *clientType;
+
+    if(pClient->hasPriority) clientType = SPECIAL;
+    else clientType = REGULAR;
+
+    sprintf(str, pFormat,clientType,pClient->id,pObject,asctime (timeinfo));
     str[pBufferSize - 1] = NULL;
 
     printf(str);

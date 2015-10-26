@@ -18,13 +18,15 @@ struct ClientThread
     int *specialClientsCounterPtr;
     bool isActive;
     bool hasPriority;
+    int cashierQueueSize;
+    int cashierPosition;
     int state; // State 1 -> Chairs Queue, State 2-> BarbersList, State 3 -> Cashier Queue, State 4 -> Finished
     pthread_t thread;
     Node *actualNode;
     ClientThread *nextClient;
     Container *chairsQueue;
     Container *barbersList;
-    Container *cashiersQueue;
+    int *cashiersQueue;
     Semaphore *chairsSem;
     Semaphore *barbersSem ;
     Semaphore *cashierSem;
@@ -49,11 +51,12 @@ void joinThreadList(ClientThreadList* pList);
 ClientThread *createClient (
     int pId,
     int *pSpecialClientsCounterPtr,
+    int pCashierQueueSize,
     bool pHasPriority,
     ClientThreadList *pList,
     Container *pChairsQueue,
     Container *pBarbersList,
-    Container *pCashiersQueue,
+    int *pCashiersQueue,
     Semaphore *pChairsSem,
     Semaphore *pBarbersSem,
     Semaphore *pCashierSem,
@@ -69,5 +72,10 @@ bool moveToBarber(ClientThread *pClient);
 Node *findEmptyChair(ClientThread *pClient);
 Node *findEmptyBarber(ClientThread *pClient);
 void executeBarberLogic(ClientThread *pClient);
+int findCashierQueueSpace(ClientThread *pClient);
 void executeCashierLogic(ClientThread *pClient);
+void moveFromCashierQueue(ClientThread *pClient);
+void payToCahier(ClientThread *pClient);
 void writeLog(int pBufferSize, ClientThread *pClient, char *pFormat);
+void writeLongLog(int pBufferSize, ClientThread *pClient, char *pFormat, int pObject);
+

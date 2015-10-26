@@ -37,17 +37,17 @@
 	<sys/shm.h>
 	"BarberShopStructures.h"
 
-1445735244 source:/home/luiscruz/Documents/BarberShop/Clients/BarberShopStructures.c
+1445824509 source:/home/luiscruz/Documents/BarberShop/Clients/BarberShopStructures.c
 	"BarberShopStructures.h"
 
-1445805995 /home/luiscruz/Documents/BarberShop/Clients/BarberShopStructures.h
+1445824491 /home/luiscruz/Documents/BarberShop/Clients/BarberShopStructures.h
 	<stdlib.h>
 	<malloc.h>
 	<stdbool.h>
 	<pthread.h>
 	<unistd.h>
 
-1445734304 source:/home/luiscruz/Documents/BarberShop/Clients/SemaphoreStruct.c
+1445824103 source:/home/luiscruz/Documents/BarberShop/Clients/SemaphoreStruct.c
 	"SemaphoreStruct.h"
 
 1445734287 /home/luiscruz/Documents/BarberShop/Clients/SemaphoreStruct.h
@@ -60,7 +60,7 @@
 	<sys/stat.h>
 	<fcntl.h>
 
-1445808789 source:/home/luiscruz/Documents/BarberShop/Clients/main.c
+1445831716 source:/home/luiscruz/Documents/BarberShop/Clients/main.c
 	<stdio.h>
 	<stdlib.h>
 	<unistd.h>
@@ -69,15 +69,15 @@
 	<sys/shm.h>
 	"ClientThread.h"
 
-1445808787 source:/home/luiscruz/Documents/BarberShop/Clients/ClientThread.c
+1445832735 source:/home/luiscruz/Documents/BarberShop/Clients/ClientThread.c
 	"ClientThread.h"
 
-1445807603 /home/luiscruz/Documents/BarberShop/Clients/ClientThread.h
+1445829819 /home/luiscruz/Documents/BarberShop/Clients/ClientThread.h
 	<time.h>
 	"BarberShopStructures.h"
 	"SemaphoreStruct.h"
 
-1445745603 source:/home/luiscruz/Documents/BarberShop/Clients/FileHandler.c
+1445819287 source:/home/luiscruz/Documents/BarberShop/Clients/FileHandler.c
 	<stdio.h>
 	"semaphore.h"
 

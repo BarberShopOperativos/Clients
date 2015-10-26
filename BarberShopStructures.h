@@ -41,3 +41,4 @@ void printQueueContainer(Container *pContainer);
 int generateRandomInRange(int pMin, int pMax);
 void addExistingNodeToListContainer(Container *pContainer, Node *pNode);
 void addExistingNodeToQueueContainer(Container *pContainer, Node *pNode);
+void clearCashierQueue(int *pPointer, int pSize, int pClearValue);
