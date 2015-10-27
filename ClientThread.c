@@ -337,9 +337,10 @@ void executeBarberLogic(ClientThread *pClient)
     // If there is space
     if(cashierPosition != -1)
     {
+        sleep(generateRandomInRange(5,30));
+
         sem_wait(pClient->barbersSem->mutex);
         pClient->actualNode->isOcupied = false;
-        sleep(generateRandomInRange(5,30));
         sem_post(pClient->barbersSem->mutex);
 
         pClient->cashierPosition = cashierPosition;
@@ -349,7 +350,6 @@ void executeBarberLogic(ClientThread *pClient)
 
 
 }
-
 
 /// <summary>
 /// Looks for an space in the cashier queue
@@ -374,7 +374,6 @@ int findCashierQueueSpace(ClientThread *pClient)
 
     return cashierSpaceIndex;
 }
-
 
 /// <summary>
 /// Sleeps and leaves the barbers list
@@ -417,23 +416,20 @@ void moveFromCashierQueue(ClientThread *pClient)
     }
 }
 
-
-
 /// <summary>
 /// Frees the space in queue an gets inactive
 /// </summary>
 void payToCahier(ClientThread *pClient)
 {
-    sem_wait(pClient->cashierSem->mutex);
-    // Free the space
-    *(pClient->cashiersQueue + pClient->cashierPosition) = 0;
     sleep(generateRandomInRange(5,30));
+
+    sem_wait(pClient->cashierSem->mutex);
+    *(pClient->cashiersQueue + pClient->cashierPosition) = 0;
     sem_post(pClient->cashierSem->mutex);
 
     writeLog(150,pClient,EXEC_CASHIER);
     pClient->isActive = false;
 }
-
 
 /// <summary>
 /// Formats a string to be written in the file
